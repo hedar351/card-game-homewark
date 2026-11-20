@@ -1,4 +1,0 @@
-C:/Users/LOQ/Downloads/Telegram Desktop/L4/build/CMakeFiles/OpenGL.SharedModule.dir
-C:/Users/LOQ/Downloads/Telegram Desktop/L4/build/CMakeFiles/GLProject.dir
-C:/Users/LOQ/Downloads/Telegram Desktop/L4/build/CMakeFiles/edit_cache.dir
-C:/Users/LOQ/Downloads/Telegram Desktop/L4/build/CMakeFiles/rebuild_cache.dir
