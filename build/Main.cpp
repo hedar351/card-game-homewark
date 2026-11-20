@@ -84,7 +84,7 @@ int main()
 	Shader ourShader(
 		"./shaders/vs/L4.vs",
 		"./shaders/fs/L4.fs");
-
+	Model manaCrystal("../GLProject/models/mana-crystal-nodes.glb");
 	// -------------------------------------------------
 	// 4.3 Create Floor
 	// -------------------------------------------------
@@ -190,6 +190,88 @@ int main()
 		vec2(0.0f, 1.0f)};
 
 	PolygonWithTexture frontWall(frontWallVertices, frontWallTexCoords);
+
+	// =====================================================
+	// Shield Decoration
+	// =====================================================
+
+	// Outer shield shape
+	vector<vec3> shieldOuterVertices = {
+		vec3(-0.65f, 3.2f, -4.80f),
+		vec3(0.65f, 3.2f, -4.80f),
+		vec3(0.70f, 2.35f, -4.80f),
+		vec3(0.00f, 1.55f, -4.80f),
+		vec3(-0.70f, 2.35f, -4.80f)};
+
+	// Outer Shield Texture Coordinates
+	vector<vec2> shieldOuterTexCoords = {
+		vec2(0.0f, 1.0f),
+		vec2(1.0f, 1.0f),
+		vec2(1.0f, 0.5f),
+		vec2(0.5f, 0.0f),
+		vec2(0.0f, 0.5f)};
+
+	PolygonWithTexture shieldOuterTextured(
+		shieldOuterVertices,
+		shieldOuterTexCoords);
+
+	// Inner shield shape
+	vector<vec3> shieldInnerVertices = {
+		vec3(-0.50f, 3.05f, -4.78f),
+		vec3(0.50f, 3.05f, -4.78f),
+		vec3(0.54f, 2.35f, -4.78f),
+		vec3(0.00f, 1.78f, -4.78f),
+		vec3(-0.54f, 2.35f, -4.78f)};
+
+	vector<vec2> shieldInnerTexCoords = {
+		vec2(0.0f, 1.0f),
+		vec2(1.0f, 1.0f),
+		vec2(1.0f, 0.5f),
+		vec2(0.5f, 0.0f),
+		vec2(0.0f, 0.5f)};
+
+	PolygonWithTexture shieldInnerTextured(
+		shieldInnerVertices,
+		shieldInnerTexCoords);
+
+	std::vector<vec3> posterVertices = {
+		vec3(-4.2f, 3.3f, -4.95f), // Top left
+		vec3(-2.0f, 3.3f, -4.95f), // Top right
+
+		// Torn right edge
+		vec3(-2.12f, 2.95f, -4.95f),
+		vec3(-1.92f, 2.72f, -4.95f),
+		vec3(-2.15f, 2.45f, -4.95f),
+		vec3(-1.95f, 2.15f, -4.95f),
+
+		// Torn bottom edge
+		vec3(-2.0f, 1.2f, -4.95f),
+		vec3(-2.4f, 1.32f, -4.95f),
+		vec3(-2.75f, 1.13f, -4.95f),
+		vec3(-3.1f, 1.29f, -4.95f),
+		vec3(-3.45f, 1.10f, -4.95f),
+		vec3(-3.8f, 1.27f, -4.95f),
+		vec3(-4.2f, 1.2f, -4.95f)};
+	std::vector<vec2> posterTexCoords = {
+		vec2(0.0f, 1.0f),
+		vec2(1.0f, 1.0f),
+
+		// Right edge
+		vec2(1.0f, 0.83f),
+		vec2(1.0f, 0.72f),
+		vec2(1.0f, 0.60f),
+		vec2(1.0f, 0.45f),
+
+		// Bottom edge
+		vec2(1.0f, 0.0f),
+		vec2(0.82f, 0.05f),
+		vec2(0.66f, 0.0f),
+		vec2(0.50f, 0.04f),
+		vec2(0.34f, 0.0f),
+		vec2(0.18f, 0.03f),
+		vec2(0.0f, 0.0f)};
+	PolygonWithTexture poster(posterVertices, posterTexCoords);
+
 	// Table Top
 	vector<vec3> tableTopVertices = {
 		vec3(-2.0f, 0.5f, -1.5f),
@@ -197,8 +279,13 @@ int main()
 		vec3(2.0f, 0.5f, 1.5f),
 		vec3(-2.0f, 0.5f, 1.5f)};
 
-	Polygon tableTop(tableTopVertices, vec3(0.30f, 0.15f, 0.07f));
-	// Tabletop thickness
+	vector<vec2> tableTopTexCoords = {
+		vec2(0.0f, 0.0f),
+		vec2(1.0f, 0.0f),
+		vec2(1.0f, 1.0f),
+		vec2(0.0f, 1.0f)};
+
+	PolygonWithTexture tableTop(tableTopVertices, tableTopTexCoords); // Tabletop thickness
 	vector<vec3> tableBottomVertices = {
 		vec3(-2.0f, 0.3f, -1.5f),
 		vec3(2.0f, 0.3f, -1.5f),
@@ -241,7 +328,7 @@ int main()
 
 	// Table Legs
 
-		// =====================================================
+	// =====================================================
 	// 5. Load Floor Texture
 	// =====================================================
 
@@ -371,6 +458,240 @@ int main()
 
 	stbi_image_free(wallpaperData);
 
+	// Load Shield Texture
+	unsigned int shieldTexture;
+
+	glGenTextures(1, &shieldTexture);
+	glBindTexture(GL_TEXTURE_2D, shieldTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	unsigned char *shieldData = stbi_load(
+		"./textures/shield.jpg",
+		&width,
+		&height,
+		&nrChannels,
+		0);
+
+	if (shieldData)
+	{
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RGB,
+			width,
+			height,
+			0,
+			GL_RGB,
+			GL_UNSIGNED_BYTE,
+			shieldData);
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load shield texture" << std::endl;
+	}
+
+	stbi_image_free(shieldData);
+
+	shieldInnerTextured.setTexture(shieldTexture);
+	// Load Shield Frame Texture
+	unsigned int shieldFrameTexture;
+
+	glGenTextures(1, &shieldFrameTexture);
+	glBindTexture(GL_TEXTURE_2D, shieldFrameTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	unsigned char *shieldFrameData = stbi_load(
+		"./textures/shield_frame.jpg",
+		&width,
+		&height,
+		&nrChannels,
+		0);
+
+	if (shieldFrameData)
+	{
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RGB,
+			width,
+			height,
+			0,
+			GL_RGB,
+			GL_UNSIGNED_BYTE,
+			shieldFrameData);
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load shield frame texture" << std::endl;
+	}
+
+	stbi_image_free(shieldFrameData);
+
+	// Load Poster Texture
+	unsigned int posterTexture;
+
+	glGenTextures(1, &posterTexture);
+	glBindTexture(GL_TEXTURE_2D, posterTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	unsigned char *posterData = stbi_load("../GLProject/textures/poster.jpg", &width, &height, &nrChannels, 0);
+
+	if (posterData)
+	{
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RGB,
+			width,
+			height,
+			0,
+			GL_RGB,
+			GL_UNSIGNED_BYTE,
+			posterData);
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load poster texture" << std::endl;
+	}
+
+	stbi_image_free(posterData);
+
+	shieldOuterTextured.setTexture(shieldFrameTexture);
+	poster.setTexture(posterTexture);
+
+	// Load Table Wood Texture
+	unsigned int tableWoodTexture;
+
+	glGenTextures(1, &tableWoodTexture);
+	glBindTexture(GL_TEXTURE_2D, tableWoodTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	unsigned char *tableWoodData = stbi_load(
+		"./textures/table_wood.jpg",
+		&width,
+		&height,
+		&nrChannels,
+		0);
+
+	if (tableWoodData)
+	{
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RGB,
+			width,
+			height,
+			0,
+			GL_RGB,
+			GL_UNSIGNED_BYTE,
+			tableWoodData);
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load table wood texture" << std::endl;
+	}
+
+	stbi_image_free(tableWoodData);
+
+	tableTop.setTexture(tableWoodTexture);
+	// Plant Pot - Four Side Faces
+	glm::vec3 potColor(0.55f, 0.22f, 0.10f);
+
+	// Front face
+	vector<vec3> potFrontVertices = {
+		vec3(4.2f, -1.0f, -4.2f),
+		vec3(4.8f, -1.0f, -4.2f),
+		vec3(4.72f, -0.35f, -4.2f),
+		vec3(4.28f, -0.35f, -4.2f)};
+	Polygon potFront(potFrontVertices, potColor);
+
+	// Back face
+	vector<vec3> potBackVertices = {
+		vec3(4.8f, -1.0f, -4.8f),
+		vec3(4.2f, -1.0f, -4.8f),
+		vec3(4.28f, -0.35f, -4.8f),
+		vec3(4.72f, -0.35f, -4.8f)};
+	Polygon potBack(potBackVertices, potColor);
+
+	// Left face
+	vector<vec3> potLeftVertices = {
+		vec3(4.2f, -1.0f, -4.8f),
+		vec3(4.2f, -1.0f, -4.2f),
+		vec3(4.28f, -0.35f, -4.2f),
+		vec3(4.28f, -0.35f, -4.8f)};
+	Polygon potLeft(potLeftVertices, potColor);
+
+	// Right face
+	vector<vec3> potRightVertices = {
+		vec3(4.8f, -1.0f, -4.2f),
+		vec3(4.8f, -1.0f, -4.8f),
+		vec3(4.72f, -0.35f, -4.8f),
+		vec3(4.72f, -0.35f, -4.2f)};
+	Polygon potRight(potRightVertices, potColor);
+	// Plant Soil
+	vector<vec3> soilVertices = {
+		vec3(4.28f, -0.34f, -4.28f),
+		vec3(4.72f, -0.34f, -4.28f),
+		vec3(4.72f, -0.34f, -4.72f),
+		vec3(4.28f, -0.34f, -4.72f)};
+
+	Polygon soil(soilVertices, vec3(0.16f, 0.08f, 0.035f));
+	// Plant Stem
+	glm::vec3 stemColor(0.35f, 0.85f, 0.18f);
+	vector<vec3> stemVertices = {
+		vec3(4.48f, -0.34f, -4.50f),
+		vec3(4.54f, -0.34f, -4.50f),
+		vec3(4.54f, 0.65f, -4.50f),
+		vec3(4.48f, 0.65f, -4.50f)};
+
+	Polygon stem(stemVertices, stemColor);
+	// Plant Leaves
+	glm::vec3 leafColor(0.02f, 0.75f, 0.18f);
+
+	// Left Leaf
+	vector<vec3> leftLeafVertices = {
+		vec3(4.49f, 0.18f, -4.49f),
+		vec3(4.22f, 0.22f, -4.49f),
+		vec3(4.02f, 0.52f, -4.49f),
+		vec3(4.34f, 0.43f, -4.49f)};
+	Polygon leftLeaf(leftLeafVertices, leafColor);
+
+	// Right Leaf
+	vector<vec3> rightLeafVertices = {
+		vec3(4.53f, 0.32f, -4.49f),
+		vec3(4.75f, 0.35f, -4.49f),
+		vec3(4.98f, 0.68f, -4.49f),
+		vec3(4.70f, 0.55f, -4.49f)};
+	Polygon rightLeaf(rightLeafVertices, leafColor);
 	// Apply the same wallpaper texture to all four walls
 
 	backWall.setTexture(wallpaperTexture);
@@ -435,6 +756,14 @@ int main()
 		frontWall.draw(ourShader);
 		tableTop.draw(ourShader);
 		tableBottom.draw(ourShader);
+		potFront.draw(ourShader);
+		potBack.draw(ourShader);
+		potLeft.draw(ourShader);
+		potRight.draw(ourShader);
+		soil.draw(ourShader);
+		stem.draw(ourShader);
+		leftLeaf.draw(ourShader);
+		rightLeaf.draw(ourShader);
 		drawTableLeg(ourShader, -2.0f, -1.5f);
 		drawTableLeg(ourShader, 1.8f, -1.5f);
 		drawTableLeg(ourShader, -2.0f, 1.3f);
@@ -443,6 +772,23 @@ int main()
 		tableLeft.draw(ourShader);
 		tableBack.draw(ourShader);
 		tableFront.draw(ourShader);
+		shieldOuterTextured.draw(ourShader);
+		shieldInnerTextured.draw(ourShader);
+		poster.draw(ourShader);
+		glm::mat4 crystalModel = glm::mat4(1.0f);
+
+		crystalModel = glm::translate(
+			crystalModel,
+			glm::vec3(-1.5f, 0.5f, -1.0f));
+
+		crystalModel = glm::scale(
+			crystalModel,
+			glm::vec3(0.1f, 0.1f, 0.1f));
+
+		ourShader.setMat4("model", crystalModel);
+		manaCrystal.Draw(ourShader);
+
+		ourShader.setMat4("model", glm::mat4(1.0f));
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
