@@ -281,6 +281,46 @@ int main()
 		vec3(2.0f, 0.3f, 1.5f),
 		vec3(-2.0f, 0.3f, 1.5f)};
 
+	vector<vec3> divider1Vertices = {
+		vec3(-1.8f, 0.508f, -0.52f),
+		vec3( 1.8f, 0.508f, -0.52f),
+		vec3( 1.8f, 0.508f, -0.48f),
+		vec3(-1.8f, 0.508f, -0.48f)
+	};
+	Polygon divider1(divider1Vertices, vec3(0.25f, 0.35f, 0.55f));
+
+	vector<vec3> divider2Vertices = {
+		vec3(-1.8f, 0.508f, 0.48f),
+		vec3( 1.8f, 0.508f, 0.48f),
+		vec3( 1.8f, 0.508f, 0.52f),
+		vec3(-1.8f, 0.508f, 0.52f)
+	};
+	Polygon divider2(divider2Vertices, vec3(0.65f, 0.48f, 0.20f));
+
+	vector<vec3> opponentMarkerVertices = {
+		vec3(-0.45f, 0.509f, -1.30f),
+		vec3( 0.45f, 0.509f, -1.30f),
+		vec3( 0.45f, 0.509f, -1.24f),
+		vec3(-0.45f, 0.509f, -1.24f)
+	};
+	Polygon opponentMarker(opponentMarkerVertices, vec3(0.25f, 0.45f, 0.85f));
+
+	vector<vec3> deckMarkerVertices = {
+		vec3(-0.95f, 0.509f, -0.42f),
+		vec3(-0.15f, 0.509f, -0.42f),
+		vec3(-0.15f, 0.509f, -0.36f),
+		vec3(-0.95f, 0.509f, -0.36f)
+	};
+	Polygon deckMarker(deckMarkerVertices, vec3(0.85f, 0.60f, 0.20f));
+
+	vector<vec3> playerMarkerVertices = {
+		vec3(-0.45f, 0.509f, 1.30f),
+		vec3( 0.45f, 0.509f, 1.30f),
+		vec3( 0.45f, 0.509f, 1.24f),
+		vec3(-0.45f, 0.509f, 1.24f)
+	};
+	Polygon playerMarker(playerMarkerVertices, vec3(0.25f, 0.65f, 0.35f));	
+
 	Polygon tableBottom(tableBottomVertices, vec3(0.30f, 0.15f, 0.07f));
 
 	vector<vec3> tableFrontVertices = {
@@ -710,15 +750,15 @@ for (int i = 0; i < 5; i++)
 
 		float offset = i * 0.025f;
 
-		float xPosition = -0.05f + offset;
+		float xPosition = -0.55f + offset;
 
 		float yPosition = verticalMode
 			? 0.82f + (i * 0.008f)
 			: 0.51f + (i * 0.008f);
 
 		float zPosition = verticalMode
-			? 0.35f + offset
-			: 0.35f - offset;
+			? 0.0f + offset
+			: 0.0f - offset;
 
 		cardPositions[cardIndex] = glm::vec3(
 			xPosition,
@@ -901,9 +941,9 @@ if (twoPressed && !twoKeyWasPressed)
 				float offset = i * 0.025f;
 
 				targetPositions[cardIndex] = glm::vec3(
-					-0.05f + offset,
+					-0.55f + offset,
 					verticalMode ? 0.82f + (i * 0.008f) : 0.51f + (i * 0.008f),
-					verticalMode ? 0.35f + offset : 0.35f - offset
+					verticalMode ? 0.0f + offset : 0.0f - offset
 				);
 				targetAngles[cardIndex] = verticalMode ? -90.0f : 0.0f;
 			}
@@ -1002,6 +1042,12 @@ if (twoPressed && !twoKeyWasPressed)
 		leftWall.draw(ourShader);
 		frontWall.draw(ourShader);
 		tableTop.draw(ourShader);
+		divider1.draw(ourShader);
+		divider2.draw(ourShader);
+
+		opponentMarker.draw(ourShader);
+		deckMarker.draw(ourShader);
+		playerMarker.draw(ourShader);
 		glActiveTexture(GL_TEXTURE0);
 		ourShader.setInt("texture_diffuse1", 0);
 
