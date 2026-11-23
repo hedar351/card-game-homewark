@@ -1,4 +1,3 @@
-
 #include "libs/glad_loader_docs.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -19,18 +18,8 @@
 
 using namespace glm;
 
-// =====================================================
-// 1. Window Settings
-// =====================================================
-
 int SCR_WIDTH = 1280;
 int SCR_HEIGHT = 720;
-
-// =====================================================
-// 2. Camera Settings
-// =====================================================
-
-// Camera camera(vec3(0.0f, 2.5f, 6.5f));
 
 Camera camera(
     vec3(0.0555789f, 1.36426f, 2.23016f),
@@ -54,17 +43,10 @@ bool cameraControlEnabled = false;
 bool oneKeyWasPressed = false;
 bool twoKeyWasPressed = false;
 
-// =====================================================
-// 3. Function Declarations
-// =====================================================
-
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void drawTableLeg(Shader &shader, float x, float z);
-// =====================================================
-// 4. Main Function
-// =====================================================
 bool gKeyPressed = false;
 
 void updateCardPosition(
@@ -95,9 +77,6 @@ void updateCardPosition(
 
 int main()
 {
-	// -------------------------------------------------
-	// 4.1 Initialize GLFW and Create Window
-	// -------------------------------------------------
 	bool gKeyWasPressed = false;
 	bool verticalMode = true;
 	bool vKeyWasPressed = false;
@@ -126,17 +105,10 @@ int main()
 
 	stbi_set_flip_vertically_on_load(true);
 
-	// -------------------------------------------------
-	// 4.2 Load Shader
-	// -------------------------------------------------
-
 	Shader ourShader(
 		"./shaders/vs/L4.vs",
 		"./shaders/fs/L4.fs");
 	Model manaCrystal("../GLProject/models/mana-crystal-nodes.glb");
-	// -------------------------------------------------
-	// 4.3 Create Floor
-	// -------------------------------------------------
 
 	vector<vec3> floorVertices = {
 		vec3(-5.0f, -1.0f, -5.0f),
@@ -152,10 +124,6 @@ int main()
 
 	PolygonWithTexture floor(floorVertices, floorTexCoords);
 
-	// -------------------------------------------------
-	// 4.4 Create Ceiling
-	// -------------------------------------------------
-
 	vector<vec3> roofVertices = {
 		vec3(-5.0f, 4.0f, -5.0f),
 		vec3(5.0f, 4.0f, -5.0f),
@@ -167,10 +135,6 @@ int main()
 		vec2(1.0f, 1.0f),
 		vec2(0.0f, 1.0f)};
 	PolygonWithTexture roof(roofVertices, roofTexCoords);
-
-	// -------------------------------------------------
-	// 4.5 Create Back Wall
-	// -------------------------------------------------
 
 	vector<vec3> backWallVertices = {
 		vec3(-5.0f, -1.0f, -5.0f),
@@ -186,10 +150,6 @@ int main()
 
 	PolygonWithTexture backWall(backWallVertices, backWallTexCoords);
 
-	// -------------------------------------------------
-	// 4.6 Create Right Wall
-	// -------------------------------------------------
-
 	vector<vec3> rightWallVertices = {
 		vec3(5.0f, -1.0f, -5.0f),
 		vec3(5.0f, -1.0f, 5.0f),
@@ -203,10 +163,6 @@ int main()
 		vec2(0.0f, 1.0f)};
 
 	PolygonWithTexture rightWall(rightWallVertices, rightWallTexCoords);
-
-	// -------------------------------------------------
-	// 4.7 Create Left Wall
-	// -------------------------------------------------
 
 	vector<vec3> leftWallVertices = {
 		vec3(-5.0f, -1.0f, -5.0f),
@@ -222,10 +178,6 @@ int main()
 
 	PolygonWithTexture leftWall(leftWallVertices, leftWallTexCoords);
 
-	// -------------------------------------------------
-	// 4.8 Create Front Wall
-	// -------------------------------------------------
-
 	vector<vec3> frontWallVertices = {
 		vec3(-5.0f, -1.0f, 5.0f),
 		vec3(5.0f, -1.0f, 5.0f),
@@ -240,11 +192,6 @@ int main()
 
 	PolygonWithTexture frontWall(frontWallVertices, frontWallTexCoords);
 
-	// =====================================================
-	// Shield Decoration
-	// =====================================================
-
-	// Outer shield shape
 	vector<vec3> shieldOuterVertices = {
 		vec3(-0.65f, 3.2f, -4.80f),
 		vec3(0.65f, 3.2f, -4.80f),
@@ -252,7 +199,6 @@ int main()
 		vec3(0.00f, 1.55f, -4.80f),
 		vec3(-0.70f, 2.35f, -4.80f)};
 
-	// Outer Shield Texture Coordinates
 	vector<vec2> shieldOuterTexCoords = {
 		vec2(0.0f, 1.0f),
 		vec2(1.0f, 1.0f),
@@ -264,7 +210,6 @@ int main()
 		shieldOuterVertices,
 		shieldOuterTexCoords);
 
-	// Inner shield shape
 	vector<vec3> shieldInnerVertices = {
 		vec3(-0.50f, 3.05f, -4.78f),
 		vec3(0.50f, 3.05f, -4.78f),
@@ -284,16 +229,14 @@ int main()
 		shieldInnerTexCoords);
 
 	std::vector<vec3> posterVertices = {
-		vec3(-4.2f, 3.3f, -4.95f), // Top left
-		vec3(-2.0f, 3.3f, -4.95f), // Top right
+		vec3(-4.2f, 3.3f, -4.95f),
+		vec3(-2.0f, 3.3f, -4.95f),
 
-		// Torn right edge
 		vec3(-2.12f, 2.95f, -4.95f),
 		vec3(-1.92f, 2.72f, -4.95f),
 		vec3(-2.15f, 2.45f, -4.95f),
 		vec3(-1.95f, 2.15f, -4.95f),
 
-		// Torn bottom edge
 		vec3(-2.0f, 1.2f, -4.95f),
 		vec3(-2.4f, 1.32f, -4.95f),
 		vec3(-2.75f, 1.13f, -4.95f),
@@ -305,13 +248,11 @@ int main()
 		vec2(0.0f, 1.0f),
 		vec2(1.0f, 1.0f),
 
-		// Right edge
 		vec2(1.0f, 0.83f),
 		vec2(1.0f, 0.72f),
 		vec2(1.0f, 0.60f),
 		vec2(1.0f, 0.45f),
 
-		// Bottom edge
 		vec2(1.0f, 0.0f),
 		vec2(0.82f, 0.05f),
 		vec2(0.66f, 0.0f),
@@ -321,7 +262,6 @@ int main()
 		vec2(0.0f, 0.0f)};
 	PolygonWithTexture poster(posterVertices, posterTexCoords);
 
-	// Table Top
 	vector<vec3> tableTopVertices = {
 		vec3(-2.0f, 0.5f, -1.5f),
 		vec3(2.0f, 0.5f, -1.5f),
@@ -334,32 +274,15 @@ int main()
 		vec2(1.0f, 1.0f),
 		vec2(0.0f, 1.0f)};
 
-	PolygonWithTexture tableTop(tableTopVertices, tableTopTexCoords); // Tabletop thickness
+	PolygonWithTexture tableTop(tableTopVertices, tableTopTexCoords);
 	vector<vec3> tableBottomVertices = {
 		vec3(-2.0f, 0.3f, -1.5f),
 		vec3(2.0f, 0.3f, -1.5f),
 		vec3(2.0f, 0.3f, 1.5f),
 		vec3(-2.0f, 0.3f, 1.5f)};
 
-	// vector<vec3> cardVertices = {
-	// 	vec3(-0.15f, 0.51f, -0.20f),
-	// 	vec3( 0.15f, 0.51f, -0.20f),
-	// 	vec3( 0.15f, 0.51f,  0.20f),
-	// 	vec3(-0.15f, 0.51f,  0.20f)
-	// };
-
-	// vector<vec2> cardTexCoords = {
-	// 	vec2(1.0f, 0.0f),
-	// 	vec2(0.0f, 0.0f),
-	// 	vec2(0.0f, 1.0f),
-	// 	vec2(1.0f, 1.0f)
-	// };
-
-	// PolygonWithTexture firstCard(cardVertices, cardTexCoords);
-
 	Polygon tableBottom(tableBottomVertices, vec3(0.30f, 0.15f, 0.07f));
 
-	// Front side
 	vector<vec3> tableFrontVertices = {
 		vec3(-2.0f, 0.3f, -1.5f),
 		vec3(2.0f, 0.3f, -1.5f),
@@ -367,7 +290,6 @@ int main()
 		vec3(-2.0f, 0.5f, -1.5f)};
 	Polygon tableFront(tableFrontVertices, vec3(0.30f, 0.15f, 0.07f));
 
-	// Back side
 	vector<vec3> tableBackVertices = {
 		vec3(-2.0f, 0.3f, 1.5f),
 		vec3(2.0f, 0.3f, 1.5f),
@@ -375,7 +297,6 @@ int main()
 		vec3(-2.0f, 0.5f, 1.5f)};
 	Polygon tableBack(tableBackVertices, vec3(0.30f, 0.15f, 0.07f));
 
-	// Left side
 	vector<vec3> tableLeftVertices = {
 		vec3(-2.0f, 0.3f, -1.5f),
 		vec3(-2.0f, 0.3f, 1.5f),
@@ -383,19 +304,12 @@ int main()
 		vec3(-2.0f, 0.5f, -1.5f)};
 	Polygon tableLeft(tableLeftVertices, vec3(0.30f, 0.15f, 0.07f));
 
-	// Right side
 	vector<vec3> tableRightVertices = {
 		vec3(2.0f, 0.3f, -1.5f),
 		vec3(2.0f, 0.3f, 1.5f),
 		vec3(2.0f, 0.5f, 1.5f),
 		vec3(2.0f, 0.5f, -1.5f)};
 	Polygon tableRight(tableRightVertices, vec3(0.30f, 0.15f, 0.07f));
-
-	// Table Legs
-
-	// =====================================================
-	// 5. Load Floor Texture
-	// =====================================================
 
 	unsigned int texture;
 
@@ -438,7 +352,6 @@ int main()
 	}
 
 	stbi_image_free(data);
-	// Load Ceiling Texture
 	unsigned int ceilingTexture;
 
 	glGenTextures(1, &ceilingTexture);
@@ -480,9 +393,6 @@ int main()
 	stbi_image_free(ceilingData);
 	floor.setTexture(texture);
 	roof.setTexture(ceilingTexture);
-	// =====================================================
-	// 6. Load Wallpaper Texture
-	// =====================================================
 
 	unsigned int wallpaperTexture;
 	glGenTextures(1, &wallpaperTexture);
@@ -523,7 +433,6 @@ int main()
 
 	stbi_image_free(wallpaperData);
 
-	// Load Shield Texture
 	unsigned int shieldTexture;
 
 	glGenTextures(1, &shieldTexture);
@@ -565,7 +474,6 @@ int main()
 	stbi_image_free(shieldData);
 
 	shieldInnerTextured.setTexture(shieldTexture);
-	// Load Shield Frame Texture
 	unsigned int shieldFrameTexture;
 
 	glGenTextures(1, &shieldFrameTexture);
@@ -606,7 +514,6 @@ int main()
 
 	stbi_image_free(shieldFrameData);
 
-	// Load Poster Texture
 	unsigned int posterTexture;
 
 	glGenTextures(1, &posterTexture);
@@ -646,7 +553,6 @@ int main()
 	shieldOuterTextured.setTexture(shieldFrameTexture);
 	poster.setTexture(posterTexture);
 
-	// Load Table Wood Texture
 	unsigned int tableWoodTexture;
 
 	glGenTextures(1, &tableWoodTexture);
@@ -688,8 +594,6 @@ int main()
 	stbi_image_free(tableWoodData);
 
 	tableTop.setTexture(tableWoodTexture);
-		// Load Card Texture
-// Card textures
 vector<string> cardTexturePaths = {
     "./textures/knight.jpg",
     "./textures/hornt.jpg",
@@ -748,8 +652,6 @@ for (int i = 0; i < 5; i++)
     stbi_image_free(cardData);
 }
 
-	// firstCard.setTexture(cardTexture);
-	// Card vertices
 	vector<vec3> cardVertices = {
 		vec3(-0.15f, 0.0f, -0.20f),
 		vec3( 0.15f, 0.0f, -0.20f),
@@ -757,7 +659,6 @@ for (int i = 0; i < 5; i++)
 		vec3(-0.15f, 0.0f,  0.20f)
 	};
 
-// Card texture coordinates
 	vector<vec2> cardTexCoords = {
 		vec2(1.0f, 0.0f),
 		vec2(0.0f, 0.0f),
@@ -765,9 +666,6 @@ for (int i = 0; i < 5; i++)
 		vec2(1.0f, 1.0f)
 	};
 
-	// Create five cards
-
-// Create five cards
 	vector<int> availableCards = { 0, 1, 2, 3, 4 };
 
 	random_device rd;
@@ -786,7 +684,6 @@ for (int i = 0; i < 5; i++)
 	vector<float> targetAngles(5, -90.0f);
 	cards.reserve(5);
 
-	// First: Create all cards and assign textures
 	for (int i = 0; i < 5; i++)
 	{
 		cards.emplace_back(cardVertices, cardTexCoords);
@@ -813,9 +710,6 @@ for (int i = 0; i < 5; i++)
 
 		float offset = i * 0.025f;
 
-		// float xPosition = verticalMode
-		// 	? 0.05f - offset
-		// 	: -0.05f + offset;
 		float xPosition = -0.05f + offset;
 
 		float yPosition = verticalMode
@@ -846,10 +740,8 @@ for (int i = 0; i < 5; i++)
 
 
 
-	// Plant Pot - Four Side Faces
 	glm::vec3 potColor(0.55f, 0.22f, 0.10f);
 
-	// Front face
 	vector<vec3> potFrontVertices = {
 		vec3(4.2f, -1.0f, -4.2f),
 		vec3(4.8f, -1.0f, -4.2f),
@@ -857,7 +749,6 @@ for (int i = 0; i < 5; i++)
 		vec3(4.28f, -0.35f, -4.2f)};
 	Polygon potFront(potFrontVertices, potColor);
 
-	// Back face
 	vector<vec3> potBackVertices = {
 		vec3(4.8f, -1.0f, -4.8f),
 		vec3(4.2f, -1.0f, -4.8f),
@@ -865,7 +756,6 @@ for (int i = 0; i < 5; i++)
 		vec3(4.72f, -0.35f, -4.8f)};
 	Polygon potBack(potBackVertices, potColor);
 
-	// Left face
 	vector<vec3> potLeftVertices = {
 		vec3(4.2f, -1.0f, -4.8f),
 		vec3(4.2f, -1.0f, -4.2f),
@@ -873,14 +763,12 @@ for (int i = 0; i < 5; i++)
 		vec3(4.28f, -0.35f, -4.8f)};
 	Polygon potLeft(potLeftVertices, potColor);
 
-	// Right face
 	vector<vec3> potRightVertices = {
 		vec3(4.8f, -1.0f, -4.2f),
 		vec3(4.8f, -1.0f, -4.8f),
 		vec3(4.72f, -0.35f, -4.8f),
 		vec3(4.72f, -0.35f, -4.2f)};
 	Polygon potRight(potRightVertices, potColor);
-	// Plant Soil
 	vector<vec3> soilVertices = {
 		vec3(4.28f, -0.34f, -4.28f),
 		vec3(4.72f, -0.34f, -4.28f),
@@ -888,7 +776,6 @@ for (int i = 0; i < 5; i++)
 		vec3(4.28f, -0.34f, -4.72f)};
 
 	Polygon soil(soilVertices, vec3(0.16f, 0.08f, 0.035f));
-	// Plant Stem
 	glm::vec3 stemColor(0.35f, 0.85f, 0.18f);
 	vector<vec3> stemVertices = {
 		vec3(4.48f, -0.34f, -4.50f),
@@ -897,10 +784,8 @@ for (int i = 0; i < 5; i++)
 		vec3(4.48f, 0.65f, -4.50f)};
 
 	Polygon stem(stemVertices, stemColor);
-	// Plant Leaves
 	glm::vec3 leafColor(0.02f, 0.75f, 0.18f);
 
-	// Left Leaf
 	vector<vec3> leftLeafVertices = {
 		vec3(4.49f, 0.18f, -4.49f),
 		vec3(4.22f, 0.22f, -4.49f),
@@ -908,23 +793,17 @@ for (int i = 0; i < 5; i++)
 		vec3(4.34f, 0.43f, -4.49f)};
 	Polygon leftLeaf(leftLeafVertices, leafColor);
 
-	// Right Leaf
 	vector<vec3> rightLeafVertices = {
 		vec3(4.53f, 0.32f, -4.49f),
 		vec3(4.75f, 0.35f, -4.49f),
 		vec3(4.98f, 0.68f, -4.49f),
 		vec3(4.70f, 0.55f, -4.49f)};
 	Polygon rightLeaf(rightLeafVertices, leafColor);
-	// Apply the same wallpaper texture to all four walls
 
 	backWall.setTexture(wallpaperTexture);
 	rightWall.setTexture(wallpaperTexture);
 	leftWall.setTexture(wallpaperTexture);
 	frontWall.setTexture(wallpaperTexture);
-
-	// =====================================================
-	// 7. Projection Setup
-	// =====================================================
 
 	ourShader.use();
 
@@ -938,17 +817,10 @@ for (int i = 0; i < 5; i++)
 
 	ourShader.setMat4("projection", projection);
 
-	// =====================================================
-	// 8. Render Loop
-	// =====================================================
-
-	// vector<int> availableCards = { 0, 1, 2, 3, 4 };
-	
 	
 	while (!glfwWindowShouldClose(window))
 	{
 		float cardY = verticalMode ? 0.70f : 0.51f;
-		// Calculate frame time
 		bool cPressed = glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS;
 
 		if (cPressed && !cKeyWasPressed)
@@ -957,7 +829,6 @@ for (int i = 0; i < 5; i++)
 
 			if (cameraControlEnabled)
 			{
-				// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 				glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 				cout << "Camera Control: ON" << endl;
 			}
@@ -977,7 +848,6 @@ for (int i = 0; i < 5; i++)
 		bool twoPressed = glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS;
 		bool cameraChanged = false;
 
-// Camera 1: Top View
 if (onePressed && !oneKeyWasPressed)
 {
     cameraMode = 1;
@@ -999,7 +869,6 @@ if (onePressed && !oneKeyWasPressed)
     cout << "Camera 1: Top View" << endl;
 }
 
-// Camera 2: Player View
 if (twoPressed && !twoKeyWasPressed)
 {
     cameraMode = 2;
@@ -1025,7 +894,6 @@ if (twoPressed && !twoKeyWasPressed)
 
 		if (cameraChanged)
 		{
-			// Update cards still in the deck
 			for (int i = 0; i < availableCards.size(); i++)
 			{
 				int cardIndex = availableCards[i];
@@ -1040,7 +908,6 @@ if (twoPressed && !twoKeyWasPressed)
 				targetAngles[cardIndex] = verticalMode ? -90.0f : 0.0f;
 			}
 
-			// Update cards already played
 			for (int i = 0; i < playedCards.size(); i++)
 			{
 				int cardIndex = playedCards[i];
@@ -1059,13 +926,11 @@ if (twoPressed && !twoKeyWasPressed)
 
 		if (gPressed && !gKeyWasPressed && !availableCards.empty())
 		{
-			// Take the next card from the shuffled deck
 			int cardIndex = availableCards.back();
 			availableCards.pop_back();
 
 			playedCards.push_back(cardIndex);
 
-			// Position of the played card
 			int playedPosition = playedCards.size() - 1;
 
 			targetPositions[cardIndex] = glm::vec3(
@@ -1082,56 +947,6 @@ if (twoPressed && !twoKeyWasPressed)
 		gKeyWasPressed = gPressed;
 
 		
-		// bool vPressed = glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS;
-
-		// if (vPressed && !vKeyWasPressed)
-		// {
-		// 	verticalMode = !verticalMode;
-
-		// 	// Update cards still in the deck
-		// 	for (int i = 0; i < availableCards.size(); i++)
-		// 	{
-		// 		int cardIndex = availableCards[i];
-
-		// 		float offset = i * 0.025f;
-
-		// 		float xPosition = -0.05f + offset;
-		// 		float yPosition = verticalMode
-		// 			? 0.70f + (i * 0.008f)
-		// 			: 0.51f + (i * 0.008f);
-		// 		float zPosition = 0.05f - offset;
-
-		// 		updateCardPosition(
-		// 			cards[cardIndex],
-		// 			xPosition,
-		// 			yPosition,
-		// 			zPosition,
-		// 			verticalMode
-		// 		);
-		// 	}
-
-		// 	// Update cards already played
-		// 	for (int i = 0; i < playedCards.size(); i++)
-		// 	{
-		// 		int cardIndex = playedCards[i];
-
-		// 		float xPosition = -0.84f + (i * 0.42f);
-
-		// 		updateCardPosition(
-		// 			cards[cardIndex],
-		// 			xPosition,
-		// 			verticalMode ? 0.70f : 0.51f,
-		// 			0.9f,
-		// 			verticalMode
-		// 		);
-		// 	}
-
-		// 	cout << "Vertical Mode: " << verticalMode << endl;
-		// }
-
-		// vKeyWasPressed = vPressed;
-
-
 		float currentFrame = static_cast<float>(glfwGetTime());
 
 		deltaTime = currentFrame - lastFrame;
@@ -1165,26 +980,18 @@ if (twoPressed && !twoKeyWasPressed)
 			);
 		}
 
-		// Handle keyboard input
-
 		if (cameraControlEnabled)
 		{
 			processInput(window);
 		}
 
-		// Clear screen
-
 		glClearColor(0.12f, 0.12f, 0.12f, 1.0f);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Update camera view
-
 		mat4 view = camera.GetViewMatrix();
 
 		ourShader.setMat4("view", view);
-
-		// Draw room objects
 
 		floor.draw(ourShader);
 
@@ -1198,7 +1005,6 @@ if (twoPressed && !twoKeyWasPressed)
 		glActiveTexture(GL_TEXTURE0);
 		ourShader.setInt("texture_diffuse1", 0);
 
-		// firstCard.draw(ourShader);
 		for (int i = 0; i < cards.size(); i++)
 		{
 			cards[i].draw(ourShader);
@@ -1241,18 +1047,10 @@ if (twoPressed && !twoKeyWasPressed)
 		glfwPollEvents();
 	}
 
-	// =====================================================
-	// 9. Cleanup
-	// =====================================================
-
 	glfwTerminate();
 
 	return 0;
 }
-
-// =====================================================
-// 10. Keyboard Input
-// =====================================================
 
 void processInput(GLFWwindow *window)
 {
@@ -1271,10 +1069,6 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 }
-
-// =====================================================
-// 11. Mouse Movement
-// =====================================================
 
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
 {
@@ -1300,17 +1094,12 @@ void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-// =====================================================
-// 12. Window Resize
-// =====================================================
-
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
 void drawTableLeg(Shader &shader, float x, float z)
 {
-	// 8 corners of the table leg
 	vec3 p0(x, -1.0f, z);
 	vec3 p1(x + 0.2f, -1.0f, z);
 	vec3 p2(x + 0.2f, -1.0f, z + 0.2f);
@@ -1320,21 +1109,17 @@ void drawTableLeg(Shader &shader, float x, float z)
 	vec3 p5(x + 0.2f, 0.5f, z);
 	vec3 p6(x + 0.2f, 0.5f, z + 0.2f);
 	vec3 p7(x, 0.5f, z + 0.2f);
-	// Front face
 	vector<vec3> frontFace = {p0, p1, p5, p4};
 	Polygon frontLeg(frontFace, vec3(0.30f, 0.15f, 0.07f));
 	frontLeg.draw(shader);
 
-	// Back face
 	vector<vec3> backFace = {p3, p2, p6, p7};
 	Polygon backLeg(backFace, vec3(0.30f, 0.15f, 0.07f));
 	backLeg.draw(shader);
-	// Right face
 	vector<vec3> rightFace = {p1, p2, p6, p5};
 	Polygon rightLeg(rightFace, vec3(0.30f, 0.15f, 0.07f));
 	rightLeg.draw(shader);
 
-	// Left face
 	vector<vec3> leftFace = {p0, p3, p7, p4};
 	Polygon leftLeg(leftFace, vec3(0.30f, 0.15f, 0.07f));
 	leftLeg.draw(shader);
